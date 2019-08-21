@@ -54,16 +54,8 @@ You can parse any [CSS color specification](https://developer.mozilla.org/en-US/
 
 All CSS/SVG named colors are supported, in addition to X11 named colors, when their definitions do not clash with SVG.
 
-Returns a `RGB{U8}` color, unless:
-
-- `"hsl(h, s, l)"` was used, in which case an `HSL` color is returned
-- `"rgba(r, g, b, a)"` was used, in which case an `RGBA` color is returned
-- `"hsla(h, s, l, a)"` was used, in which case an `HSLA` color is returned
-- a specific `Colorant` type was specified in the first argument
-
 When writing functions the `colorant"red"` version is preferred, because the slow step runs when the code is parsed (i.e., during compilation rather than run-time).
 
-[need docstrings too?]
 ```@docs
 @colorant_str
 hex
@@ -103,22 +95,18 @@ whitebalance
 
 ## Color Difference
 
-The `colordiff()` function gives an approximate value for the difference between two colors.
+The `colordiff` function gives an approximate value for the difference between two colors.
 
 ```
 julia> colordiff(colorant"red", parse(Colorant, HSB(360, 0.75, 1)))
 8.178248292426845
 ```
 
-`colordiff(a::Color, b::Color)`
+`colordiff(a::Color, b::Color; metric::DifferenceMetric=DE_2000())`
 
-Evaluate the [CIEDE2000](http://en.wikipedia.org/wiki/Color_difference#CIEDE2000) color difference formula. This gives an approximate measure of the perceptual difference between two colors to a typical viewer. A larger number is returned for increasingly distinguishable colors.
+Evaluate the [CIEDE2000](http://en.wikipedia.org/wiki/Color_difference#CIEDE2000) color difference formula by default. This gives an approximate measure of the perceptual difference between two colors to a typical viewer. A larger number is returned for increasingly distinguishable colors.
 
-`colordiff(a::Color, b::Color, m::DifferenceMetric)`
-
-Evaluate the color difference formula specified by the supplied `DifferenceMetric`.
-
-Options are as follows:
+Options for `DifferenceMetric` are as follows:
 
 | Option                                                 | Action                                        |
 | ----------                                             | -------                                       |
@@ -137,23 +125,8 @@ Options are as follows:
 |`DE_DIN99d()`                                           | Specify the Euclidean color difference equation applied in the `DIN99d` uniform colorspace.                                                                 |
 |`DE_DIN99o()`                                           | Specify the Euclidean color difference equation applied in the `DIN99o` uniform colorspace.                                                                 |
 
-[need docstrings?]
 ```@docs
 colordiff
-DE_2000
-DE_94
-DE_JPC79
-DE_CMC
-DE_BFD
-DE_AB
-DE_DIN99
-DE_DIN99d
-DE_DIN99o
-MSC
-CIE1931_CMF
-CIE1964_CMF
-CIE1931J_CMF
-CIE1931JV_CMF
 ```
 
 ## Simulation of color deficiency ("color blindness")
